@@ -1156,6 +1156,45 @@ section{
   }
 }
 
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━
+   LANGUAGE TOGGLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.language-toggle{
+  position:fixed;
+  top:1rem;
+  right:1rem;
+  z-index:300;
+  display:flex;
+  gap:.25rem;
+  padding:.25rem;
+  border:1px solid rgba(245,242,236,.18);
+  border-radius:999px;
+  background:rgba(15,14,12,.68);
+  backdrop-filter:blur(12px);
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+}
+.language-toggle button{
+  border:0;
+  border-radius:999px;
+  padding:.42rem .62rem;
+  background:transparent;
+  color:rgba(245,242,236,.58);
+  font-family:var(--sans);
+  font-size:.68rem;
+  font-weight:600;
+  letter-spacing:.08em;
+  cursor:pointer;
+  transition:background .2s ease,color .2s ease;
+}
+.language-toggle button:hover{color:#fff;background:rgba(245,242,236,.09)}
+.language-toggle button.active{background:var(--paper);color:var(--ink)}
+@media(max-width:640px){
+  .language-toggle{top:.75rem;right:.75rem}
+  .language-toggle button{padding:.38rem .54rem;font-size:.62rem}
+}
+
 </style>
 
 
@@ -1198,6 +1237,12 @@ section{
   </symbol>
 </svg>
 <div id="progress-bar"></div>
+
+<div class="language-toggle" aria-label="Selector de idioma">
+  <button type="button" data-lang="es" class="active" aria-pressed="true">ES</button>
+  <button type="button" data-lang="en" aria-pressed="false">EN</button>
+</div>
+
 
 
 <!-- ═══════════════════════════════════
@@ -1902,6 +1947,204 @@ section{
 </section>
 
 <script>
+
+/* ─── LANGUAGE SWITCHER ─── */
+const ES_TO_EN = Object.freeze({
+  "Madrid a pie — Accesibilidad en aceras": "Madrid on foot — Sidewalk accessibility",
+  "Madrid · Accesibilidad en aceras": "Madrid · Sidewalk accessibility",
+  "Madrid tiene": "Madrid has",
+  "metros inaccesibles en sus aceras": "inaccessible meters of sidewalk",
+  "Casi un millón de metros de espacio peatonal quedan por debajo del umbral mínimo de accesibilidad.": "Almost one million meters of pedestrian space fall below the minimum accessibility threshold.",
+  "6.550.743 m analizados": "6,550,743 m analyzed",
+  "El": "",
+  "14,3%": "14.3%",
+  "del total analizado está por debajo de 1,80 m": "of the analyzed total is below 1.80 m",
+  "Desliza": "Scroll",
+  "La regla": "The rule",
+  "¿Cuándo una acera deja de ser": "When does a sidewalk stop being",
+  "accesible?": "accessible?",
+  "En este análisis se considera inaccesible cualquier tramo cuya": "In this analysis, any segment whose",
+  "anchura libre de paso sea inferior a 1,80 metros": "clear passage width is below 1.80 meters",
+  ". Ese umbral no es arbitrario: la": ". This threshold is not arbitrary: the",
+  "Orden TMA/851/2021": "Order TMA/851/2021",
+  ", que regula las condiciones básicas de accesibilidad en espacios públicos urbanizados, fija esa anchura como referencia del itinerario peatonal accesible.": ", which regulates basic accessibility conditions in urbanized public spaces, sets that width as the reference for an accessible pedestrian route.",
+  "La razón es sencilla: la accesibilidad no consiste solo en “poder pasar”, sino en poder hacerlo de forma autónoma, segura y continua. Una silla de ruedas, un carrito o dos personas que se cruzan necesitan espacio real, no una media estadística.": "The reason is simple: accessibility is not just about “being able to pass”, but about doing so independently, safely and continuously. A wheelchair, a stroller or two people crossing paths need real space, not a statistical average.",
+  "936.857 m": "936,857 m",
+  "por debajo de 1,80 m": "below 1.80 m",
+  "de los metros de acera analizados": "of the analyzed sidewalk meters",
+  "Umbral mínimo según": "Minimum threshold according to",
+  ", BOE-A-2021-13488 — Condiciones básicas de accesibilidad y no discriminación": ", BOE-A-2021-13488 — Basic accessibility and non-discrimination conditions",
+  "El metro mínimo": "The minimum meter",
+  "No todos los metros estrechos": "Not every narrow meter",
+  "tienen el mismo impacto": "has the same impact",
+  "Un punto aislado por debajo de 1,80 m puede ser un obstáculo puntual. Pero varios metros consecutivos por debajo de ese umbral forman una barrera. Por eso este análisis no solo cuenta metros: identifica cuándo los estrechamientos fragmentan el recorrido.": "A single point below 1.80 m can be a punctual obstacle. But several consecutive meters below that threshold become a barrier. That is why this analysis does not only count meters: it identifies when narrow sections fragment the route.",
+  "Para entenderlo mejor, aquí no se muestra una nube de puntos sino una": "To make this clearer, this is not shown as a cloud of points but as the",
+  "misma ruta recorrida por tres perfiles distintos": "same route followed by three different profiles",
+  ". Cada fila representa exactamente la misma secuencia de anchuras. Lo que cambia no es la calle, sino el umbral de accesibilidad de cada persona.": ". Each row represents exactly the same sequence of widths. What changes is not the street, but each person’s accessibility threshold.",
+  "48,4%": "48.4%",
+  "de las aceras analizadas no son accesibles de forma continua": "of analyzed sidewalks are not continuously accessible",
+  "porque presentan tramos por debajo de 1,80 m.": "because they contain sections below 1.80 m.",
+  "La trampa de la media": "The average-width trap",
+  "Muchas calles parecen accesibles…": "Many streets seem accessible…",
+  "hasta que dejan de serlo.": "until they stop being so.",
+  "Una calle puede tener una anchura media aceptable y, aun así, no ser accesible. Basta un solo estrechamiento para romper el recorrido completo.": "A street can have an acceptable average width and still not be accessible. A single narrowing is enough to break the entire route.",
+  "Antes del punto rojo, la ruta funciona. Después también podría funcionar. Pero la persona no puede saltarse el tramo estrecho: el itinerario se corta ahí.": "Before the red point, the route works. After it, it might also work. But the person cannot skip the narrow segment: the route breaks there.",
+  "El recorrido": "The route",
+  "Una ruta solo es accesible": "A route is only accessible",
+  "hasta su punto": "up to its",
+  "más estrecho": "narrowest point",
+  "Selecciona un perfil y observa cómo un solo tramo estrecho puede bloquear el paso. Una ciudad no se recorre en porcentajes: se recorre metro a metro.": "Select a profile and see how a single narrow segment can block the way. A city is not travelled through percentages: it is travelled meter by meter.",
+  "Persona estándar": "Standard pedestrian",
+  "Carrito": "Stroller",
+  "Silla de ruedas": "Wheelchair",
+  "¡Paso bloqueado!": "Passage blocked!",
+  "1,80 m": "1.80 m",
+  "Anchura mínima necesaria": "Minimum width needed",
+  "Metros bajo el umbral": "Meters below the threshold",
+  "Del total analizado": "Of total analyzed",
+  "Aceras fragmentadas": "Fragmented sidewalks",
+  "Caso real · Arganzuela": "Real case · Arganzuela",
+  "Imagina vivir aquí:": "Imagine living here:",
+  "C. Candelaria Mora 7": "C. Candelaria Mora 7",
+  "Imagina que vives en": "Imagine you live at",
+  "Candelaria Mora 7": "Candelaria Mora 7",
+  "y eres una persona con movilidad reducida que se desplaza en silla de ruedas. Si el tramo frente a tu casa no mantiene una anchura accesible,": "and you are a person with reduced mobility who moves around in a wheelchair. If the section in front of your home does not maintain an accessible width,",
+  "no es solo una acera estrecha": "it is not just a narrow sidewalk",
+  ": es una barrera que puede dejarte atascado antes incluso de salir de tu calle.": ": it is a barrier that can leave you stuck before you even leave your street.",
+  "La calle puede parecer accesible durante buena parte del recorrido.": "The street may seem accessible along much of the route.",
+  "Pero basta un punto estrecho para interrumpir toda la continuidad. Antes de ese punto, la ruta funciona. Después, también podría funcionar. El problema es que no puedes saltarte el tramo que se rompe.": "But one narrow point is enough to interrupt the whole continuity. Before that point, the route works. After it, it might also work. The problem is that you cannot skip the broken segment.",
+  "Anchura media": "Average width",
+  "Puntos bajo 1,80 m": "Points below 1.80 m",
+  "Mayor tramo accesible": "Longest accessible stretch",
+  "Primer punto crítico": "First critical point",
+  "≥ 1,80 m": "≥ 1.80 m",
+  "1,50–1,80 m": "1.50–1.80 m",
+  "1,20–1,50 m": "1.20–1.50 m",
+  "< 1,20 m": "< 1.20 m",
+  "Aquí se rompe la accesibilidad": "Accessibility breaks here",
+  "Bloqueado: la ruta accesible termina aquí": "Blocked: the accessible route ends here",
+  "Repetir recorrido": "Replay route",
+  "Fragmentación por distrito": "Fragmentation by district",
+  "¿Dónde se rompe más a menudo": "Where does",
+  "Madrid?": "Madrid break most often?",
+  "Esta sección mira la accesibilidad desde otra escala: no la calle concreta, sino el patrón territorial. Una acera se considera fragmentada cuando contiene tramos consecutivos por debajo de 1,80 m.": "This section looks at accessibility from another scale: not the individual street, but the territorial pattern. A sidewalk is considered fragmented when it contains consecutive sections below 1.80 m.",
+  "El ranking ordena los distritos por porcentaje de aceras fragmentadas. La lectura es directa: cuanto más arriba aparece un distrito, más veces se interrumpe la continuidad peatonal.": "The ranking orders districts by the percentage of fragmented sidewalks. The reading is straightforward: the higher a district appears, the more often pedestrian continuity is interrupted.",
+  "Tetuán": "Tetuán",
+  "destaca porque alrededor de siete de cada diez aceras analizadas presentan fragmentación. Después aparecen otros distritos donde el problema no es solo puntual, sino repetido.": "stands out because roughly seven out of ten analyzed sidewalks show fragmentation. Other districts follow where the problem is not just occasional, but repeated.",
+  "Estrechez vs continuidad": "Narrowness vs continuity",
+  "Estrechez y fragmentación no son exactamente lo mismo.": "Narrowness and fragmentation are not exactly the same thing.",
+  "El eje horizontal muestra el porcentaje de puntos por debajo de 1,80 m. El eje vertical muestra el porcentaje de aceras fragmentadas. La diferencia importa: un distrito puede tener menos puntos estrechos, pero si están distribuidos en muchas aceras, rompe más rutas.": "The horizontal axis shows the percentage of points below 1.80 m. The vertical axis shows the percentage of fragmented sidewalks. The difference matters: a district may have fewer narrow points, but if they are distributed across many sidewalks, it breaks more routes.",
+  "Cada punto es un distrito. El color indica la intensidad de la fragmentación: verde apagado para valores más bajos, naranja para valores intermedios y rojo para valores altos. Pasa el cursor o toca un punto para ver sus datos.": "Each point is a district. Color indicates fragmentation intensity: muted green for lower values, orange for intermediate values and red for high values. Hover or tap a point to see its data.",
+  "¿Dónde rompe más Madrid?": "Where does Madrid break most?",
+  "Aceras fragmentadas por distrito": "Fragmented sidewalks by district",
+  "distritos con datos": "districts with data",
+  "aceras fragmentadas del total": "fragmented sidewalks of total",
+  "70,5%": "70.5%",
+  "valor máximo robusto: Tetuán": "robust maximum value: Tetuán",
+  "Datos del CSV proporcionado: aceras fragmentadas con al menos dos segmentos consecutivos bajo 1,80 m. En móvil, toca los puntos del gráfico para ver los valores.": "Data from the provided CSV: sidewalks fragmented by at least two consecutive segments below 1.80 m. On mobile, tap chart points to see the values.",
+  "Ranking de calles": "Street ranking",
+  "Cuando el problema": "When the problem",
+  "tiene nombre y calle": "has a name and a street",
+  "Las cifras agregadas ayudan, pero la accesibilidad se vive en calles concretas. En esta sección se pueden ver ejemplos de aceras en Madrid donde la calidad del espacio público tiene un impacto cotidiano directo.": "Aggregate figures help, but accessibility is experienced on specific streets. This section shows examples of Madrid sidewalks where the quality of public space has a direct everyday impact.",
+  "Conclusión": "Conclusion",
+  "MADRID NO TIENE SOLO": "MADRID DOES NOT ONLY HAVE",
+  "metros estrechos. Tiene recorridos rotos.": "narrow meters. It has broken routes.",
+  "Madrid acumula": "Madrid has accumulated",
+  "936.857 metros": "936,857 meters",
+  "de acera por debajo de 1,80 m. Pero el dato más importante no es únicamente cuántos metros fallan, sino dónde se concentran y cómo interrumpen la continuidad del recorrido.": "of sidewalk below 1.80 m. But the most important figure is not only how many meters fail, but where they concentrate and how they interrupt route continuity.",
+  "Una persona no se mueve por la anchura media de una calle. Se mueve por una secuencia de pasos, cruces, giros y puntos estrechos. Si uno de esos puntos no permite pasar, el itinerario deja de ser accesible aunque antes y después la acera sea amplia.": "A person does not move through the average width of a street. They move through a sequence of steps, crossings, turns and narrow points. If one of those points does not allow passage, the route stops being accessible even if the sidewalk is wide before and after it.",
+  "Por eso medir la accesibilidad exige mirar la ciudad como una red continua. No basta con localizar aceras anchas: hay que identificar dónde se rompe la ruta, en qué barrios ocurre con más frecuencia y qué calles concentran barreras que limitan la autonomía diaria de personas mayores, familias con carrito y personas con movilidad reducida.": "That is why measuring accessibility requires looking at the city as a continuous network. It is not enough to locate wide sidewalks: we need to identify where routes break, in which neighborhoods it happens most often and which streets concentrate barriers that limit the daily autonomy of older people, families with strollers and people with reduced mobility.",
+  "Una ciudad accesible no es la que tiene algunas aceras anchas. Es la que garantiza que cualquier recorrido pueda hacerse de principio a fin.": "An accessible city is not one with a few wide sidewalks. It is one that guarantees every route can be completed from start to finish.",
+  "Regulación:": "Regulation:",
+  "Orden TMA/851/2021 — BOE-A-2021-13488": "Order TMA/851/2021 — BOE-A-2021-13488",
+  "· Datos: análisis de accesibilidad en aceras de Madrid": "· Data: Madrid sidewalk accessibility analysis"
+});
+let currentLang = localStorage.getItem('madridSidewalkLang') || 'es';
+if(!['es','en'].includes(currentLang)) currentLang='es';
+let staticI18nNodes = [];
+
+function localeCode(){
+  return currentLang === 'en' ? 'en-US' : 'es-ES';
+}
+function tr(es,en){
+  return currentLang === 'en' ? en : es;
+}
+function formatDecimal(v,d=1){
+  return Number(v).toLocaleString(localeCode(),{minimumFractionDigits:d,maximumFractionDigits:d});
+}
+function formatInt(v){
+  return Number(v).toLocaleString(localeCode());
+}
+function localizeNumberString(str){
+  if(currentLang !== 'en') return str;
+  return String(str)
+    .replace(/(\d)\.(\d{3})(\D|$)/g,'$1,$2$3')
+    .replace(/(\d),(\d)(\D|$)/g,'$1.$2$3')
+    .replace(/(\d),(\d{2})(\D|$)/g,'$1.$2$3');
+}
+function normalizeI18nText(value){
+  return String(value).replace(/\s+/g,' ').trim();
+}
+function initStaticI18nNodes(){
+  staticI18nNodes=[];
+  const walker=document.createTreeWalker(document.documentElement,NodeFilter.SHOW_TEXT,{
+    acceptNode(node){
+      const parent=node.parentElement;
+      if(!parent) return NodeFilter.FILTER_REJECT;
+      if(['SCRIPT','STYLE','SVG','SYMBOL','DEFS','PATH','G','FILTER'].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
+      const key=normalizeI18nText(node.nodeValue);
+      return ES_TO_EN[key] ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+  let node;
+  while((node=walker.nextNode())){
+    const key=normalizeI18nText(node.nodeValue);
+    staticI18nNodes.push({
+      node,
+      key,
+      leading:(node.nodeValue.match(/^\s*/)||[''])[0],
+      trailing:(node.nodeValue.match(/\s*$/)||[''])[0]
+    });
+  }
+}
+function applyLanguage(lang){
+  currentLang = lang === 'en' ? 'en' : 'es';
+  localStorage.setItem('madridSidewalkLang', currentLang);
+  document.documentElement.lang = currentLang;
+  document.title = currentLang === 'en' ? ES_TO_EN['Madrid a pie — Accesibilidad en aceras'] : 'Madrid a pie — Accesibilidad en aceras';
+
+  staticI18nNodes.forEach(item=>{
+    item.node.nodeValue = item.leading + (currentLang === 'en' ? ES_TO_EN[item.key] : item.key) + item.trailing;
+  });
+
+  document.querySelectorAll('.language-toggle button').forEach(btn=>{
+    const active=btn.dataset.lang===currentLang;
+    btn.classList.toggle('active',active);
+    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+  });
+  const toggle=document.querySelector('.language-toggle');
+  if(toggle) toggle.setAttribute('aria-label', tr('Selector de idioma','Language selector'));
+  const districtSvg=document.getElementById('district-svg');
+  if(districtSvg) districtSvg.setAttribute('aria-label', tr('Visualización interactiva de fragmentación por distritos','Interactive visualization of sidewalk fragmentation by district'));
+  const candelariaSvg=document.getElementById('candelaria-svg');
+  if(candelariaSvg) candelariaSvg.setAttribute('aria-label', tr('Puntos de anchura medidos en Candelaria Mora','Measured width points on Candelaria Mora'));
+  const quiz=document.getElementById('quiz');
+  if(quiz) quiz.setAttribute('aria-label', tr('Fragmentación de aceras por distrito','Sidewalk fragmentation by district'));
+  const blockedMsg=document.getElementById('blocked-msg');
+  if(blockedMsg) blockedMsg.textContent=tr('¡Paso bloqueado!','Passage blocked!');
+
+  if(typeof updateWalkStats === 'function' && typeof currentProfile !== 'undefined') updateWalkStats(currentProfile);
+  if(typeof buildStreets === 'function') buildStreets();
+  if(typeof animateStreetBars === 'function') animateStreetBars();
+  if(typeof renderDistrictStage === 'function' && typeof districtInitialized !== 'undefined' && districtInitialized) renderDistrictStage(districtActiveStep);
+  if(typeof updateCandelariaStats === 'function' && Array.isArray(cmPoints) && cmPoints.length) updateCandelariaStats(cmPoints);
+}
+function setupLanguageToggle(){
+  document.querySelectorAll('.language-toggle button').forEach(btn=>{
+    btn.addEventListener('click',()=>applyLanguage(btn.dataset.lang));
+  });
+}
+
 /* ─── DATA ─── */
 
 // Candelaria Mora is loaded dynamically from ./Candelaria_Mora.geojson
@@ -2322,13 +2565,13 @@ function startHero(){
   function step(now){
     const p=Math.min((now-start)/duration,1);
     const eased=1-Math.pow(1-p,3);
-    el.textContent=Math.round(eased*target).toLocaleString('es-ES');
-    const pct=(eased*14.3).toFixed(1);
-    pctEl.textContent=pct+'%';
+    el.textContent=formatInt(Math.round(eased*target));
+    const pct=eased*14.3;
+    pctEl.textContent=formatDecimal(pct,1)+'%';
     if(p<1)requestAnimationFrame(step);
     else{
-      el.textContent=target.toLocaleString('es-ES');
-      pctEl.textContent='14,3%';
+      el.textContent=formatInt(target);
+      pctEl.textContent=formatDecimal(14.3,1)+'%';
     }
   }
   requestAnimationFrame(step);
@@ -2496,7 +2739,7 @@ function buildWalk(profile){
     el.style.justifyContent='center';
     const lbl=document.createElement('span');
     lbl.style.cssText='font-size:10px;font-weight:500;color:rgba(15,14,12,.4);font-family:DM Sans,sans-serif;letter-spacing:.04em;';
-    lbl.textContent=sg.label;
+    lbl.textContent=localizeNumberString(sg.label);
     el.appendChild(lbl);
     segsEl.appendChild(el);
     x+=sg.w+2;
@@ -2538,9 +2781,9 @@ function buildWalk(profile){
 
 function updateWalkStats(profile){
   const p=PROFILES[profile];
-  document.getElementById('ws-threshold').textContent=p.threshold.toFixed(1)+' m';
-  document.getElementById('ws-affected').textContent=p.affectedM;
-  document.getElementById('ws-pct').textContent=p.pct;
+  document.getElementById('ws-threshold').textContent=formatDecimal(p.threshold,1)+' m';
+  document.getElementById('ws-affected').textContent=localizeNumberString(p.affectedM);
+  document.getElementById('ws-pct').textContent=localizeNumberString(p.pct);
 }
 
 document.querySelectorAll('.profile-btn').forEach(btn=>{
@@ -2605,7 +2848,7 @@ function cmWidthColor(w){
 }
 
 function fmtComma(n,d=1){
-  return Number(n).toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d});
+  return Number(n).toLocaleString(localeCode(),{minimumFractionDigits:d,maximumFractionDigits:d});
 }
 
 function detectWidth(props={}){
@@ -2832,7 +3075,7 @@ async function drawCandelaria(){
   buildRoutePoints();
 
   if(!cmPoints.length){
-    setCandelariaMessage('Could not load Candelaria_Mora.geojson. Put it in the same folder as this HTML and open it through a local server.',true);
+    setCandelariaMessage(tr('No se ha podido cargar Candelaria_Mora.geojson. Ponlo en la misma carpeta que este HTML y ábrelo mediante un servidor local.','Could not load Candelaria_Mora.geojson. Put it in the same folder as this HTML and open it through a local server.'),true);
     return;
   }
 
@@ -2883,7 +3126,7 @@ function setCmAvatarSvg(useSecond=false){
   const src=useSecond ? './segundowheelchair.svg' : './primerowheelchair.svg';
   const img=document.createElement('img');
   img.className='cm-wheelchair-img';
-  img.alt='Silla de ruedas';
+  img.alt=tr('Silla de ruedas','Wheelchair');
   img.src=src;
   img.onerror=()=>{ avatar.innerHTML=getAvatarSVG('wheelchair',.06); };
   avatar.innerHTML='';
@@ -2991,12 +3234,12 @@ function animateRouteSequence(route,message,onEnd){
 
       setBreakLabelForPoint(
         point,
-        `Corte · ${Math.round(point.dist)} m · ${point.width.toFixed(2)} m`,
+        `${tr('Corte','Break')} · ${Math.round(point.dist)} m · ${formatDecimal(point.width,2)} m`,
         true
       );
 
       setCandelariaMessage(
-        `Bloqueado en el metro ${Math.round(point.dist)}: la acera mide ${point.width.toFixed(2)} m, por debajo de ${CM_THRESHOLD.toFixed(1)} m.`,
+        currentLang==='en' ? `Blocked at meter ${Math.round(point.dist)}: the sidewalk is ${formatDecimal(point.width,2)} m wide, below ${formatDecimal(CM_THRESHOLD,1)} m.` : `Bloqueado en el metro ${Math.round(point.dist)}: la acera mide ${formatDecimal(point.width,2)} m, por debajo de ${formatDecimal(CM_THRESHOLD,1)} m.`,
         true
       );
 
@@ -3012,12 +3255,12 @@ function animateRouteSequence(route,message,onEnd){
 
       setBreakLabelForPoint(
         point,
-        `Alcanza · ${Math.round(point.dist)} m`,
+        `${tr('Alcanza','Reaches')} · ${Math.round(point.dist)} m`,
         true
       );
 
       setCandelariaMessage(
-        `Este sentido alcanza el metro ${Math.round(point.dist)} sin encontrar un punto por debajo de ${CM_THRESHOLD.toFixed(1)} m.`,
+        currentLang==='en' ? `This direction reaches meter ${Math.round(point.dist)} without finding a point below ${formatDecimal(CM_THRESHOLD,1)} m.` : `Este sentido alcanza el metro ${Math.round(point.dist)} sin encontrar un punto por debajo de ${formatDecimal(CM_THRESHOLD,1)} m.`,
         true
       );
 
@@ -3050,27 +3293,27 @@ async function animateCandelariaRoute(){
 
   placeCandelariaOverlayByPoint(startPoint,false);
   markDot(startPoint,'active-point',9);
-  setBreakLabelForPoint(startPoint,'Punto de inicio',true);
-  setCandelariaMessage('Calle Candelaria Mora 7. Primero se prueba el recorrido hacia arriba.',true);
+  setBreakLabelForPoint(startPoint,tr('Punto de inicio','Starting point'),true);
+  setCandelariaMessage(tr('Calle Candelaria Mora 7. Primero se prueba el recorrido hacia arriba.','Candelaria Mora 7. First, the route is tested uphill.'),true);
 
   const firstRoute=getRouteBetweenRouteIndexes(startIndex,firstTarget);
   const secondRoute=getRouteBetweenRouteIndexes(startIndex,secondTarget);
 
   setTimeout(()=>{
     setCmAvatarSvg(false);
-    animateRouteSequence(firstRoute,`Primer intento: de Candelaria Mora 7 hacia arriba`,()=>{
+    animateRouteSequence(firstRoute,tr('Primer intento: de Candelaria Mora 7 hacia arriba','First attempt: from Candelaria Mora 7 uphill'),()=>{
       avatar.classList.remove('blocked');
       clearRouteDotState();
       placeCandelariaOverlayByPoint(startPoint,false);
       markDot(startPoint,'active-point',9);
-      setBreakLabelForPoint(startPoint,'Vuelta al inicio',true);
-      setCandelariaMessage('Vuelta al punto inicial. Ahora se prueba el recorrido en sentido contrario.',true);
+      setBreakLabelForPoint(startPoint,tr('Vuelta al inicio','Back to start'),true);
+      setCandelariaMessage(tr('Vuelta al punto inicial. Ahora se prueba el recorrido en sentido contrario.','Back to the starting point. Now the route is tested in the opposite direction.'),true);
 
       setTimeout(()=>{
         clearRouteDotState();
         setCmAvatarSvg(true);
-        animateRouteSequence(secondRoute,`Segundo intento: de Candelaria Mora 7 hacia abajo`,()=>{
-          setCandelariaMessage('Demostración terminada: la accesibilidad se decide en el primer punto donde el itinerario se rompe.',true);
+        animateRouteSequence(secondRoute,tr('Segundo intento: de Candelaria Mora 7 hacia abajo','Second attempt: from Candelaria Mora 7 downhill'),()=>{
+          setCandelariaMessage(tr('Demostración terminada: la accesibilidad se decide en el primer punto donde el itinerario se rompe.','Demo complete: accessibility is decided at the first point where the route breaks.'),true);
         });
       },1150);
     });
@@ -3122,9 +3365,9 @@ function isMobileDistrict(){
   return window.matchMedia('(max-width: 640px)').matches;
 }
 function fmtPctDot(v,d=1){
-  return Number(v).toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d})+'%';
+  return Number(v).toLocaleString(localeCode(),{minimumFractionDigits:d,maximumFractionDigits:d})+'%';
 }
-function fmtInt(v){return Number(v).toLocaleString('es-ES');}
+function fmtInt(v){return Number(v).toLocaleString(localeCode());}
 function safePct(v){return Number.isFinite(+v)?+v:0;}
 function colorForFragmentation(pct){
   if(pct>=60) return '#c0392b';
@@ -3191,11 +3434,11 @@ function showDistrictTooltip(evt,d){
   const body=document.getElementById('district-viz-body');
   if(!tip||!body) return;
   tip.innerHTML=`<strong>${d.name}</strong>
-    <div class="tt-row"><span>Aceras fragmentadas</span><b>${fmtPctDot(d.pct_aceras_fragmentadas)}</b></div>
-    <div class="tt-row"><span>Puntos &lt; 1,80 m</span><b>${fmtPctDot(d.pct_puntos_barrera)}</b></div>
-    <div class="tt-row"><span>Aceras analizadas</span><b>${fmtInt(d.aceras_total)}</b></div>
-    <div class="tt-row"><span>Aceras fragmentadas</span><b>${fmtInt(d.aceras_fragmentadas)}</b></div>
-    ${d.smallSample?'<div style="margin-top:.4rem;color:#f0c98a">Muestra muy pequeña en este archivo</div>':''}`;
+    <div class="tt-row"><span>${tr('Aceras fragmentadas','Fragmented sidewalks')}</span><b>${fmtPctDot(d.pct_aceras_fragmentadas)}</b></div>
+    <div class="tt-row"><span>${tr('Puntos &lt; 1,80 m','Points &lt; 1.80 m')}</span><b>${fmtPctDot(d.pct_puntos_barrera)}</b></div>
+    <div class="tt-row"><span>${tr('Aceras analizadas','Sidewalks analyzed')}</span><b>${fmtInt(d.aceras_total)}</b></div>
+    <div class="tt-row"><span>${tr('Aceras fragmentadas','Fragmented sidewalks')}</span><b>${fmtInt(d.aceras_fragmentadas)}</b></div>
+    ${d.smallSample?`<div style="margin-top:.4rem;color:#f0c98a">${tr('Muestra muy pequeña en este archivo','Very small sample in this file')}</div>`:''}`;
   const rect=body.getBoundingClientRect();
   const clientX = evt.clientX ?? (evt.touches && evt.touches[0] ? evt.touches[0].clientX : rect.left+20);
   const clientY = evt.clientY ?? (evt.touches && evt.touches[0] ? evt.touches[0].clientY : rect.top+20);
@@ -3232,10 +3475,10 @@ function renderRanking(){
   const svg=clearDistrictViz();
   if(!svg) return;
   const mobile=isMobileDistrict();
-  setDistrictHead('¿Dónde rompe más Madrid?','Ranking de aceras fragmentadas por distrito','01/02',[
-    {value:String(DISTRICTS.length),label:'distritos con datos'},
-    {value:fmtPctDot(overallDistrictFragmentation()),label:'aceras fragmentadas'},
-    {value:'70,5%',label:'Tetuán'}
+  setDistrictHead(tr('¿Dónde rompe más Madrid?','Where does Madrid break most?'),tr('Ranking de aceras fragmentadas por distrito','Ranking of fragmented sidewalks by district'),'01/02',[
+    {value:String(DISTRICTS.length),label:tr('distritos con datos','districts with data')},
+    {value:fmtPctDot(overallDistrictFragmentation()),label:tr('aceras fragmentadas','fragmented sidewalks')},
+    {value:formatDecimal(70.5,1)+'%',label:'Tetuán'}
   ]);
   svg.setAttribute('viewBox',mobile?'0 0 430 620':'0 0 860 540');
   const data=sortedDistrictsByFragmentation();
@@ -3275,22 +3518,22 @@ function renderRanking(){
     }else{
       addText(svg,fmtPctDot(d.pct_aceras_fragmentadas),left+target+8,y+12,{},'rank-value '+(isImp?'important':''));
       if(d.smallSample){
-        addText(svg,'muestra baja',left+target+62,y+12,{fill:'rgba(245,242,236,.32)','font-family':'var(--sans)','font-size':'10'},'');
+        addText(svg,tr('muestra baja','low sample'),left+target+62,y+12,{fill:'rgba(245,242,236,.32)','font-family':'var(--sans)','font-size':'10'},'');
       }
     }
   });
 
-  addText(svg,'Porcentaje de aceras fragmentadas',left+chartW/2,mobile?606:526,{'text-anchor':'middle'},'svg-axis-title');
+  addText(svg,tr('Porcentaje de aceras fragmentadas','Percentage of fragmented sidewalks'),left+chartW/2,mobile?606:526,{'text-anchor':'middle'},'svg-axis-title');
 }
 
 function renderScatter(){
   const svg=clearDistrictViz();
   if(!svg) return;
   const mobile=isMobileDistrict();
-  setDistrictHead('Estrechez y fragmentación','Cada punto es un distrito · toca o pasa el cursor','02/02',[
-    {value:'X',label:'puntos < 1,80 m'},
-    {value:'Y',label:'aceras fragmentadas'},
-    {value:'color',label:'intensidad'}
+  setDistrictHead(tr('Estrechez y fragmentación','Narrowness and fragmentation'),tr('Cada punto es un distrito · toca o pasa el cursor','Each point is a district · tap or hover'),'02/02',[
+    {value:'X',label:tr('puntos < 1,80 m','points < 1.80 m')},
+    {value:'Y',label:tr('aceras fragmentadas','fragmented sidewalks')},
+    {value:tr('color','color'),label:tr('intensidad','intensity')}
   ]);
   svg.setAttribute('viewBox',mobile?'0 0 430 560':'0 0 860 540');
 
@@ -3316,10 +3559,10 @@ function renderScatter(){
 
   svg.appendChild(svgEl('line',{x1:m.l,y1:m.t+H,x2:m.l+W,y2:m.t+H,class:'svg-axis-line'}));
   svg.appendChild(svgEl('line',{x1:m.l,y1:m.t,x2:m.l,y2:m.t+H,class:'svg-axis-line'}));
-  addText(svg,mobile?'% puntos < 1,80 m':'% de puntos por debajo de 1,80 m',m.l+W/2,vh-34,{'text-anchor':'middle'},'svg-axis-title');
-  addText(svg,mobile?'% aceras fragmentadas':'% de aceras fragmentadas',18,m.t+H/2,{'text-anchor':'middle',transform:`rotate(-90 18 ${m.t+H/2})`},'svg-axis-title');
+  addText(svg,mobile?tr('% puntos < 1,80 m','% points < 1.80 m'):tr('% de puntos por debajo de 1,80 m','% of points below 1.80 m'),m.l+W/2,vh-34,{'text-anchor':'middle'},'svg-axis-title');
+  addText(svg,mobile?tr('% aceras fragmentadas','% fragmented sidewalks'):tr('% de aceras fragmentadas','% of fragmented sidewalks'),18,m.t+H/2,{'text-anchor':'middle',transform:`rotate(-90 18 ${m.t+H/2})`},'svg-axis-title');
 
-  const legend=mobile?[['Baja','#5f8f7d'],['Media','#e67e22'],['Alta','#d35400'],['Muy alta','#c0392b']]:[['Baja','#5f8f7d'],['Media','#e67e22'],['Alta','#d35400'],['Muy alta','#c0392b']];
+  const legend=mobile?[[tr('Baja','Low'),'#5f8f7d'],[tr('Media','Medium'),'#e67e22'],[tr('Alta','High'),'#d35400'],[tr('Muy alta','Very high'),'#c0392b']]:[[tr('Baja','Low'),'#5f8f7d'],[tr('Media','Medium'),'#e67e22'],[tr('Alta','High'),'#d35400'],[tr('Muy alta','Very high'),'#c0392b']];
   legend.forEach((l,i)=>{
     const spacing=mobile?76:64;
     const x=(mobile?78:m.l+W-250)+i*spacing;
@@ -3389,12 +3632,28 @@ window.addEventListener('resize',()=>{
 });
 
 /* ─── STREETS ─── */
+
+const STREET_NOTES_EN={
+  'Tramo muy fragmentado':'Highly fragmented section',
+  'Estrechamientos puntuales':'Isolated narrowings',
+  'Fragmentación elevada':'High fragmentation',
+  'Barreras repartidas':'Distributed barriers',
+  'Tramos largos bajo 1,80 m':'Long sections below 1.80 m',
+  'Barreras continuas':'Continuous barriers',
+  'Centro definido manualmente':'Manually defined center',
+  'Ancho medio bajo':'Low average width',
+  'Impar: 2,0% bajo 1,80 m · Par: 17,2%':'Odd side: 2.0% below 1.80 m · Even side: 17.2%'
+};
+function streetNoteText(note){
+  return currentLang==='en' ? (STREET_NOTES_EN[note] || note || '') : (note || '');
+}
+
 function buildStreets(){
   const el=document.getElementById('streets-cards');
   el.innerHTML='';
-  const fmtPct=v=>Number.isFinite(v)?v.toFixed(1)+'%':'s/d';
-  const fmtM=v=>Number.isFinite(v)?Math.round(v)+' m':'s/d';
-  const fmtWidth=v=>Number.isFinite(v)?v.toFixed(2)+' m':'s/d';
+  const fmtPct=v=>Number.isFinite(v)?formatDecimal(v,1)+'%':tr('s/d','n/a');
+  const fmtM=v=>Number.isFinite(v)?formatInt(Math.round(v))+' m':tr('s/d','n/a');
+  const fmtWidth=v=>Number.isFinite(v)?formatDecimal(v,2)+' m':tr('s/d','n/a');
 
   STREETS.forEach((s,i)=>{
     const pctVal=Number.isFinite(s.pct)?s.pct:0;
@@ -3409,11 +3668,11 @@ function buildStreets(){
         <div class="street-card-name">${s.name.toLowerCase()}</div>
         <div class="street-card-bar"><div class="street-card-bar-fill" style="background:${barColor}" data-w="${Math.min(100,pctVal)}"></div></div>
         <div class="street-meta">
-          <div class="street-meta-item"><strong>${fmtPct(s.pct)}</strong>Bajo 1,80 m</div>
-          <div class="street-meta-item"><strong>${fmtM(s.m)}</strong>Inaccesibles</div>
-          <div class="street-meta-item"><strong>${fmtM(s.barrierMax)}</strong>Barrera máx.</div>
+          <div class="street-meta-item"><strong>${fmtPct(s.pct)}</strong>${tr('Bajo 1,80 m','Below 1.80 m')}</div>
+          <div class="street-meta-item"><strong>${fmtM(s.m)}</strong>${tr('Inaccesibles','Inaccessible')}</div>
+          <div class="street-meta-item"><strong>${fmtM(s.barrierMax)}</strong>${tr('Barrera máx.','Max. barrier')}</div>
         </div>
-        <div class="street-note">${s.note || ''}</div>
+        <div class="street-note">${streetNoteText(s.note)}</div>
       </div>`;
     el.appendChild(card);
   });
@@ -3470,6 +3729,10 @@ window.addEventListener('resize',()=>{
   clearTimeout(resizeTimer);
   resizeTimer=setTimeout(()=>{buildWalk(currentProfile);drawStreetThumbnails();},250);
 });
+
+initStaticI18nNodes();
+setupLanguageToggle();
+applyLanguage(currentLang);
 </script>
 </body>
 </html>
