@@ -1,0 +1,78 @@
+/* Identidad de la publicación: azul municipal y tipografía de lectura DM Sans.
+   Referencias: identidad.madrid.es/colores/ y /tipografias/. */
+.header{background:#fff;color:#17212b;border-bottom:1px solid #dce5ee}
+.brand{display:flex;flex-direction:column;line-height:1.1;color:#0055a0;gap:5px;font-size:1.2rem}
+.brand .brand-name{color:#0055a0}.brand small{font-size:.52rem;letter-spacing:.13em;font-weight:500;color:#596c80}
+.nav a{color:#53657a}.nav a.active{color:#0055a0}.progress{background:#0055a0}
+.hero{background:#0055a0;color:#fff}
+.hero::before{background-image:linear-gradient(90deg,transparent 49.9%,#ffffff09 50%,transparent 50.1%);background-size:180px 100%;opacity:1}
+.hero .eyebrow{color:#fff;opacity:.85}.hero h1{color:#fff;font-weight:400}.hero-prelude,.hero h1 small{font-style:normal}
+.hero h1 #hero-count{color:#fff}.hero-text{color:#fff;opacity:.9}.hero-meter{background:#ffffff40}.hero-meter i{background:#fff}
+.hero-measure-label,.hero-measure-label strong{color:#fff}.hero-note{color:#fff;opacity:.8}.hero-note a{color:#fff}
+.hero-link{color:#fff}.hero .eyebrow{font-size:.68rem}
+.intro h2,.section-title,.ending h2{font-weight:600;letter-spacing:-.045em}
+.story-step h3{font-weight:600;letter-spacing:-.04em}.story-stat{color:#0055a0}
+.narrative-bridge{background:#eef4fa;color:#142c46;border-top:1px solid #dce5ee;border-bottom:1px solid #dce5ee}
+.narrative-bridge .eyebrow{color:#0055a0}.narrative-bridge h2{font-weight:500}.narrative-bridge h2 em{color:#0055a0;font-style:normal;font-weight:600}.narrative-bridge p:last-child{color:#4c6075}
+.map-location strong{font-weight:600;letter-spacing:-.035em}.map-location span{color:#445e78}
+.map-interface{position:sticky;top:0;height:100vh;height:100svh;margin-bottom:-100vh;margin-bottom:-100svh;z-index:700;pointer-events:none}
+.map-interface>nav,.map-interface>details,.map-interface>.map-view-controls{pointer-events:auto}
+.map-interface .map-location,.map-interface .map-legend,.map-interface .map-status{pointer-events:none}
+.map-status button{pointer-events:auto}
+.map-stage .leaflet-control-zoom a{color:#0055a0!important}
+.map-only .story-copy{visibility:hidden}
+.map-view-controls{position:absolute;z-index:720;right:24px;bottom:112px;width:min(370px,calc(100% - 48px))}
+.map-view-buttons{display:flex;justify-content:flex-end;gap:6px}.map-view-buttons button{background:#fff;border:1px solid #cedbe7;color:#0055a0;min-height:40px;padding:7px 12px;font-size:.75rem;box-shadow:0 3px 14px #102e4b10}
+.map-view-buttons button[aria-pressed=true]{background:#0055a0;color:white}
+.map-view-controls .share-status:not(:empty){background:#fff;border:1px solid #dce5ee;padding:8px 10px;margin:8px 0 0;font-size:.74rem}
+.share-link{width:100%;min-width:0;border:1px solid #0055a0;padding:10px;font:inherit;font-size:.8rem;background:white;color:#17212b;margin-top:8px}
+.share-link[hidden]{display:none}.share-status{font-size:.84rem;color:#42586f;margin:12px 0 0;min-height:1.2em}
+.map-explore[open]~.map-view-controls{display:none}
+.comparison{background:#f1f6fb;border-block:1px solid #dce5ee;padding:88px 0}
+.comparison-heading{display:grid;grid-template-columns:1.1fr 1fr;gap:72px;align-items:end;margin-bottom:36px}
+.comparison-heading .section-title{margin-bottom:0}.comparison-heading .lead{margin:0;font-size:1.04rem}
+.comparison-tools{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:16px}
+.comparison-reference{font-size:.8rem;color:#4b6075;margin:0}.reference-mark{display:inline-block;border-left:2px dashed #536c84;height:15px;margin-right:7px;vertical-align:middle}
+.comparison-tools .plain-btn{background:transparent;color:#0055a0;font-size:.8rem;white-space:nowrap}
+.comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.comparison-card{border:1px solid #d3e0ec;border-top:4px solid #0055a0;padding:30px;background:#fff;min-width:0}
+.comparison-card.secondary{border-top-color:#596f84}
+.comparison-card label{display:block;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#536b83;margin:0 0 10px}
+.comparison-card select{font-family:var(--sans);font-weight:600;font-size:clamp(1.05rem,2vw,1.4rem);color:#172f47;background:white;width:100%;border:0;border-bottom:1px solid #dce5ee;border-radius:0;padding:8px 24px 12px 0;min-height:48px;cursor:pointer;min-width:0}
+.comparison-percentage{display:flex;align-items:baseline;gap:5px;margin-top:26px;color:#0055a0}
+.comparison-percentage strong{font-family:var(--display);font-size:clamp(4.5rem,8vw,6rem);font-weight:400;line-height:1}
+.comparison-percentage>span{font-size:1.75rem;font-weight:500}.secondary .comparison-percentage{color:#455f77}
+.comparison-caption{font-size:.85rem;color:#52657a;margin:4px 0 20px}
+.comparison-bar{position:relative;height:16px;background:#e7eef6}
+.comparison-bar>span{display:block;height:100%;background:#0055a0;transition:width .4s ease}
+.secondary .comparison-bar>span{background:#596f84}
+.comparison-bar>i{position:absolute;top:-5px;height:26px;border-left:2px dashed #102e4b;filter:drop-shadow(1px 0 0 white)}
+.comparison-scale{display:flex;justify-content:space-between;font-size:.65rem;color:#596c80;margin-top:9px}
+.comparison-delta{font-size:.8rem;color:#334f6c;min-height:2.6em;margin:16px 0 18px}
+.comparison-counts{display:grid;grid-template-columns:1fr 1fr;gap:20px;border-top:1px solid #dce5ee;padding-top:18px;margin:0 0 22px}
+.comparison-counts>div{display:flex;flex-direction:column}.comparison-counts dt{order:2}
+.comparison-counts dt{font-size:.72rem;color:#596c80;margin:5px 0 0}.comparison-counts dd{font-size:1.5rem;font-weight:600;color:#213c56;margin:0;line-height:1.2}
+.comparison-card .plain-btn{border-color:#c6d9eb;color:#0055a0;max-width:100%;font-size:.8rem;line-height:1.5}
+.comparison-insight{display:grid;grid-template-columns:.9fr 1.4fr;gap:32px;align-items:center;background:#0055a0;color:#fff;padding:28px 32px;margin-top:24px}
+.comparison-insight .eyebrow{display:block;font-size:.62rem;letter-spacing:.12em;opacity:.8;margin-bottom:8px}
+.comparison-insight strong{display:block;font-size:clamp(1.3rem,2.3vw,1.9rem);line-height:1.2;font-weight:600;letter-spacing:-.025em}
+.comparison-insight p{font-size:.96rem;line-height:1.75;margin:0}
+.comparison-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}.comparison-actions button{color:#0055a0;background:#fff;border-color:#c6d9eb}
+.comparison-footnote{font-size:.8rem;color:#596c80;max-width:840px;margin:24px 0 0;line-height:1.7}
+.comparison-loading{font-size:.95rem;color:#52657a}
+[hidden]{display:none!important}
+@media(max-width:1000px){.nav{gap:17px}.nav a{font-size:.78rem}.comparison-heading{gap:35px}.comparison-card{padding:24px}.comparison-insight{gap:24px}}
+@media(max-width:760px){
+ .brand{font-size:1rem}.brand small{display:none}.nav a{font-size:.875rem}.nav{gap:15px}
+ .hero h1 #hero-count{font-size:clamp(5.5rem,23vw,10rem)}.hero h1 small{font-size:1.08rem}
+ .story-step h3{font-size:1.7rem}.map-location strong{font-size:1.55rem}
+ .map-stage .leaflet-top{top:calc(var(--header-height) + 6px)}
+ .map-view-controls{right:12px;bottom:88px;width:calc(100% - 24px)}.map-view-buttons button{font-size:.67rem;min-height:36px;padding:6px 10px}.map-view-controls .share-status:not(:empty){font-size:.67rem}
+ .map-only .map-main{touch-action:none}
+ .comparison{padding:62px 0}.comparison-heading{grid-template-columns:1fr;gap:22px;margin-bottom:28px}.comparison-heading .lead{font-size:1rem}
+ .comparison-tools{align-items:start;gap:10px}.comparison-reference{font-size:.75rem}.comparison-tools .plain-btn{font-size:.7rem;padding:7px 9px}
+ .comparison-grid{grid-template-columns:1fr;gap:20px}.comparison-card{padding:24px}.comparison-percentage strong{font-size:5rem}.comparison-delta{min-height:0}
+ .comparison-insight{grid-template-columns:1fr;padding:25px;gap:18px}.comparison-insight p{font-size:.9rem}.comparison-counts dd{font-size:1.4rem}
+ .comparison-actions button{font-size:.8rem}.comparison-heading .section-title{font-size:2.3rem}
+}
+@media(prefers-reduced-motion:reduce){.comparison-bar>span{transition:none}}
